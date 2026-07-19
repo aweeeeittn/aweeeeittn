@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>公告</title>
+<link rel="preload" as="image" href="https://img2.nloln.de/file/BQACAgUAAyEGAASLVN5eAAJio2papc2wwkcLKkUBCsR1o0-B7uhcAALjIgACQiHYVlEmLvrXkxH4PQQ.png">
+<link rel="preload" as="image" href="https://img2.nloln.de/file/BQACAgUAAyEGAASLVN5eAAJipmpay9IHwZldH0IbvfBP4zwrhYHsAAL3IgACQiHYViDrIU2wZZ00PQQ.jpeg">
+<link rel="preload" as="image" href="https://img2.nloln.de/file/BQACAgUAAyEGAASLVN5eAAJip2pazA6uN2sDQvMHCSrpner5BqRRAAL4IgACQiHYViGm7cANaR-VPQQ.png">
+<link rel="preload" as="image" href="https://img2.nloln.de/file/BQACAgUAAyEGAASLVN5eAAJi9mpdAAGoJPFQcAABDb3iQpTjYetKQEcAAkIfAAIW-ehWfNw7j0Tk2VQ9BA.jpg">
+<link rel="preload" as="image" href="https://img2.nloln.de/file/BQACAgUAAyEGAASLVN5eAAJirGpa3biX0Xfr8Vo78Vq1hnhKIDCqAAIkIwACQiHYVjRmOy64we4VPQQ.jpeg">
+<style>
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+font-family: system-ui, -apple-system, "Microsoft Yahei", sans-serif;
+-webkit-tap-highlight-color: transparent;
+}
+:root {
+--main-purple: #a37bff;
+--main-blue: #7bb8ff;
+--light-purple: #c8b4ff;
+--light-blue: #a8d8ff;
+--glass-bg: rgba(255,255,255,0.65);
+--glass-dark: rgba(255,255,255,0.72);
+--text-main: #ffffff;
+--text-sub: #cce0ff;
+--shadow: 0 4px 16px rgba(123, 97, 255, 0.12);
+--transition-normal: all 0.24s cubic-bezier(0.2,0,0.2,1);
+--transition-snap: transform 0.36s cubic-bezier(0.2, 0.05, 0.2, 1);
+--radius-sm: 10px;
+--radius-md: 14px;
+--radius-lg: 18px;
+}
+::-webkit-scrollbar {
+width: 4px;
+height: 4px;
+}
+::-webkit-scrollbar-thumb {
+background: var(--light-purple);
+border-radius: 10px;
+}
+::-webkit-scrollbar-track {
+background: transparent;
+}
+body {
+min-height: 100vh;
+overflow-x: hidden;
+overscroll-behavior: none;
+background: linear-gradient(rgba(0,0,0,0.18),rgba(0,0,0,0.18)), url("https://img2.nloln.de/file/BQACAgUAAyEGAASLVN5eAAJirGpa3biX0Xfr8Vo78Vq1hnhKIDCqAAIkIwACQiHYVjRmOy64we4VPQQ.jpeg") center/cover fixed no-repeat;
+}
+body::after {
+content: none;
+display: none;
+}
+.loading-wrap {
+position: fixed;
+inset: 0;
+background: linear-gradient(rgba(12,20,60,0.78), rgba(22,18,70,0.82)), url("https://img2.nloln.de/file/BQACAgUAAyEGAASLVN5eAAJiompaoNKmk108_GM58bxwh99xVObSAALiIgACQiHYVlwLUvdBJWzEPQQ.jpg") center/cover no-repeat;
+z-index: 9999;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+gap: 16px;
+opacity: 1;
+visibility: visible;
+transition: opacity 0.8s ease, visibility 0.8s ease;
+overflow: hidden;
+}
+.loading-wrap.hide {
+opacity: 0;
+visibility: hidden;
+pointer-events: none;
+}
+.top-time-bar {
+position: absolute;
+top: 10vh;
+left: 50%;
+transform: translateX(-50%);
+z-index: 10;
+padding: 12px 24px;
+border-radius: 999px;
+background: linear-gradient(135deg, rgba(255,255,255,0.16), rgba(180,160,255,0.22));
+border: 1px solid rgba(255,255,255,0.18);
+backdrop-filter: blur(12px);
+-webkit-backdrop-filter: blur(12px);
+box-shadow: 0 0 20px rgba(160,200,255,0.35);
+text-align: center;
+animation: timeBarFloat 3s ease-in-out infinite alternate;
+}
+@keyframes timeBarFloat {
+0% { transform: translateX(-50%) translateY(0); }
+100% { transform: translateX(-50%) translateY(-6px); }
+}
+.time-text {
+font-size: 25px;
+font-weight: 600;
+letter-spacing: 1px;
+color: #ffffff;
+text-shadow: 0 0 8px rgba(200,230,255,0.8);
+}
+.date-text {
+font-size: 13px;
+margin-top: 4px;
+letter-spacing: 2px;
+color: #e0c8ff;
+}
+.sun-ring {
+width: 140px;
+height: 140px;
+border-radius: 50%;
+background: radial-gradient(circle, rgba(255,200,220,0.9) 0%, rgba(255,220,240,0.2) 60%, transparent 75%);
+filter: blur(12px);
+position: absolute;
+top: 20vh;
+animation: ringGlow 3s ease-in-out infinite alternate;
+}
+@keyframes ringGlow {
+0% { transform: scale(0.95); opacity: 0.7; }
+100% { transform: scale(1.05); opacity: 1; }
+}
+.star-particle {
+position: absolute;
+background: #fff;
+border-radius: 50%;
+opacity: 0.45;
+}
+.star-fast { animation: starFloatFast 8s linear infinite; }
+.star-slow { animation: starFloatSlow 15s linear infinite; }
+@keyframes starFloatFast {
+0% { transform: translateY(105vh) scale(0.1); opacity: 0; }
+15% { opacity: 0.45; }
+85% { opacity: 0.3; }
+100% { transform: translateY(-10vh) scale(0.4); opacity: 0; }
+}
+@keyframes starFloatSlow {
+0% { transform: translateY(105vh) scale(0.2); opacity: 0; }
+20% { opacity: 0.45; }
+80% { opacity: 0.25; }
+100% { transform: translateY(-10vh) scale(0.3); opacity: 0; }
+}
+.avatar-box {
+width: 140px;
+height: 140px;
+border-radius: 50%;
+padding: 4px;
+background: linear-gradient(135deg, #63b8ff, #d8b8ff, #ffc8e8);
+box-shadow: 0 0 18px rgba(160,200,255,0.35);
+animation: avatarPulse 3s ease-in-out infinite;
+}
+@keyframes avatarPulse {
+0% { box-shadow: 0 0 18px rgba(160,200,255,0.35); }
+50% { box-shadow: 0 0 28px rgba(160,200,255,0.55); }
+100% { box-shadow: 0 0 18px rgba(160,200,255,0.35); }
+}
+.avatar-inner {
+width: 100%;
+height: 100%;
+border-radius: 50%;
+overflow: hidden;
+background: #223866;
+}
+.avatar-inner img {
+width: 100%;
+height: 100%;
+object-fit: cover;
+display: block;
+}
+.load-title {
+font-size: 26px;
+letter-spacing: 2px;
+background: linear-gradient(90deg,#cce0ff,#fff,#cce0ff);
+background-size: 200% 100%;
+-webkit-background-clip: text;
+color: transparent;
+animation: textShine 4s linear infinite;
+}
+@keyframes textShine {
+0% { background-position: 200% 0; }
+100% { background-position: -200% 0; }
+}
+.load-desc {
+font-size: 16px;
+color: var(--text-sub);
+text-align: center;
+line-height: 1.5;
+}
+.load-slogan {
+font-size: 15px;
+color: #b0d0ff;
+}
+.load-progress {
+font-size: 13px;
+color: rgba(255,255,255,0.6);
+}
+.down-arrow {
+position: absolute;
+bottom: 12vh;
+font-size: 40px;
+color: rgba(255,255,255,0.75);
+animation: arrowBounce 2s ease-in-out infinite;
+}
+@keyframes arrowBounce {
+0%,100% { transform: translateY(0); opacity: 0.5; }
+50% { transform: translateY(12px); opacity: 1; }
+}
+.main-box {
+width: 100%;
+min-height: 100vh;
+padding: 16px 12px 24px;
+background: transparent;
+opacity: 0;
+transform: translateY(20px) scale(0.98);
+transition: all 0.7s cubic-bezier(0.1,0,0.3,1);
+position: relative;
+z-index: 1;
+}
+.main-box.show {
+opacity: 1;
+transform: translateY(0) scale(1);
+}
+.banner {
+width: 100%;
+height: 180px;
+border-radius: var(--radius-lg);
+overflow: hidden;
+margin-bottom: 22px;
+position: relative;
+background: transparent;
+box-shadow: var(--shadow);
+}
+.banner-img {
+position: absolute;
+inset: 0;
+width: 100%;
+height: 100%;
+object-fit: cover;
+object-position: center;
+opacity: 0;
+transition: opacity 0.25s ease-in-out;
+}
+.banner-img.loaded {
+opacity: 1;
+}
+.banner-overlay {
+position: absolute;
+inset: 0;
+background: linear-gradient(rgba(0,0,0,0.15),rgba(0,0,0,0.25));
+}
+.banner-text { display: none; }
+.tag-group {
+display: flex;
+gap: 10px;
+margin-bottom: 24px;
+overflow-x: auto;
+padding-bottom: 6px;
+}
+.tag {
+flex-shrink: 0;
+padding: 7px 16px;
+border-radius: var(--radius-sm);
+background: rgba(255,255,255,0.65);
+cursor: pointer;
+font-size: 14px;
+transition: var(--transition-normal);
+backdrop-filter: blur(6px);
+color:#333;
+outline: none !important;
+border: none !important;
+box-shadow: none !important;
+-webkit-tap-highlight-color: transparent !important;
+}
+.tag:active {
+transform: scale(0.95);
+outline: none !important;
+border: none !important;
+box-shadow: none !important;
+background-color: inherit;
+}
+.tag:focus,
+.tag:focus-visible {
+outline: none !important;
+border: none !important;
+box-shadow: none !important;
+}
+.tag.active {
+background: linear-gradient(135deg,#ff9a9e,#fad0c4);
+color: #fff;
+outline: none !important;
+border: none !important;
+box-shadow: none !important;
+}
+.page { display: none; }
+.page.active { display: block; }
+.moment-card {
+background: rgba(255,255,255,0.78);
+backdrop-filter: blur(12px);
+-webkit-backdrop-filter: blur(12px);
+border-radius: var(--radius-lg);
+padding: 18px;
+margin-bottom: 18px;
+box-shadow: var(--shadow);
+transition: var(--transition-normal);
+color:#222;
+border: 1px solid rgba(255,255,255,0.6) !important;
+outline: none !important;
+}
+.moment-card:active { transform: translateY(-2px); }
+.card-top {
+display: flex;
+align-items: center;
+gap: 12px;
+margin-bottom: 12px;
+}
+.avatar {
+width: 42px;
+height: 42px;
+border-radius: var(--radius-sm);
+overflow: hidden;
+background: #ffcce0;
+}
+.avatar img {
+width: 100%;
+height: 100%;
+object-fit: cover;
+display: block;
+}
+.card-info h3 { font-size: 16px; font-weight: 500; }
+.card-info p { font-size: 12px; color: #666; margin-top:2px; }
+.card-desc { margin: 10px 0 14px; font-size: 15px; }
+.card-data { display: flex; gap: 18px; font-size: 13px; color: #777; }
+.card-data span { cursor: pointer; transition: 0.2s; }
+.card-data span:active { transform: scale(0.92); color:#ff5873; }
+.top-tag {
+float: right;
+background: linear-gradient(135deg,#ff4d4f,#ff7875);
+color: white;
+padding: 4px 10px;
+border-radius: var(--radius-sm);
+font-size: 12px;
+}
+.new-page-wrap {
+background: linear-gradient(180deg, rgba(255,214,224,0.95), rgba(216,200,255,0.95));
+border-radius: 22px;
+padding: 18px 12px 24px;
+margin-bottom: 18px;
+overflow: hidden;
+}
+.carousel-wrap {
+width: 100%;
+height: 230px;
+perspective: 900px;
+padding: 30px 0 50px;
+position: relative;
+overflow: hidden;
+cursor: grab;
+touch-action: none;
+}
+.carousel-wrap:active { cursor: grabbing; }
+.carousel-stage {
+width: 100%;
+height: 100%;
+position: relative;
+transform-style: preserve-3d;
+display: flex;
+align-items: center;
+justify-content: center;
+transition: none;
+will-change: transform;
+}
+.carousel-item {
+width: 55%;
+height: 170px;
+position: absolute;
+border-radius: 16px;
+overflow: hidden;
+box-shadow: 0 6px 20px rgba(130, 90, 220, 0.2);
+background-color: #e8d6f5;
+background-size: cover;
+background-position: center;
+background-repeat: no-repeat;
+will-change: transform, opacity, z-index, pointer-events;
+transition: transform 0.36s cubic-bezier(0.2, 0.05, 0.2, 1), opacity 0.36s cubic-bezier(0.2, 0.05, 0.2, 1), z-index 0s;
+cursor: pointer;
+pointer-events: none;
+outline: none !important;
+border: none !important;
+}
+#item1 { background-image: url("https://img2.nloln.de/file/BQACAgUAAyEGAASLVN5eAAJipmpay9IHwZldH0IbvfBP4zwrhYHsAAL3IgACQiHYViDrIU2wZZ00PQQ.jpeg"); }
+#item2 { background-image: url("https://img2.nloln.de/file/BQACAgUAAyEGAASLVN5eAAJip2pazA6uN2sDQvMHCSrpner5BqRRAAL4IgACQiHYViGm7cANaR-VPQQ.png"); }
+#item3 { background-image: url("https://img2.nloln.de/file/BQACAgUAAyEGAASLVN5eAAJi9mpdAAGoJPFQcAABDb3iQpTjYetKQEcAAkIfAAIW-ehWfNw7j0Tk2VQ9BA.jpg"); }
+.carousel-link {
+position: absolute;
+inset: 0;
+z-index: 10;
+text-decoration: none;
+display: block;
+pointer-events: auto;
+}
+.carousel-text {
+position: absolute;
+top: 16px;
+left: 50%;
+transform: translateX(-50%);
+white-space: nowrap;
+width: max-content;
+font-size: 20px;
+font-weight: 600;
+color: rgba(255,255,255,0.85);
+letter-spacing: 2px;
+text-shadow: 0 0 10px rgba(0,0,0,0.45);
+z-index: 4;
+pointer-events: none;
+overflow: hidden;
+text-overflow: ellipsis;
+}
+.carousel-item::after {
+content: "";
+position: absolute;
+top: 102%;
+left: 0;
+width: 100%;
+height: 90%;
+background: inherit;
+background-size: cover;
+background-position: center;
+transform: scaleY(-0.7);
+opacity: 0.25;
+filter: blur(2px);
+border-radius: 16px;
+}
+.item-center {
+transform: translateX(0) translateZ(60px);
+z-index: 10;
+opacity: 1;
+pointer-events: auto;
+}
+.item-left {
+transform: translateX(-65%) rotateY(28deg) scale(0.72);
+z-index: 5;
+opacity: 0.65;
+pointer-events: none;
+}
+.item-right {
+transform: translateX(65%) rotateY(-28deg) scale(0.72);
+z-index: 5;
+opacity: 0.65;
+pointer-events: none;
+}
+.slide-tip {
+text-align: center;
+color: #6a4c99;
+font-size: 13px;
+margin-top: -10px;
+margin-bottom: 16px;
+}
+.comment-modal {
+position: fixed;
+inset:0;
+background:rgba(0,0,0,0.6);
+z-index:99999;
+display:none;
+align-items:center;
+justify-content:center;
+padding:20px;
+}
+.comment-box {
+width:100%;
+max-width:400px;
+background:#fff;
+border-radius:16px;
+padding:20px;
+}
+.comment-box textarea {
+width:100%;
+height:100px;
+border:1px solid #ddd;
+border-radius:8px;
+padding:10px;
+resize:none;
+margin-bottom:12px;
+}
+.btn-group { display:flex; gap:10px; }
+.btn-group button {
+flex:1;
+padding:9px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+}
+.submit { background:#a37bff; color:#fff; }
+.close-modal { background:#eee; color:#333; }
+.comment-list { margin-top:12px; max-height:160px; overflow-y:auto; }
+.comment-item {
+padding:6px 0;
+border-bottom:1px solid #eee;
+font-size:13px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+.del-comment { color:#f44336; font-size:12px; cursor:pointer; }
+@media screen and (max-height: 700px) {
+.top-time-bar { top: 6vh; padding: 10px 14px; }
+.time-text { font-size: 22px; }
+.sun-ring { top: 18vh; }
+.carousel-item { width: 50%; height: 140px; }
+}
+@media screen and (min-width: 768px) {
+.avatar-box { width: 160px; height: 160px; }
+.load-title { font-size: 32px; }
+.main-box { padding: 40px 20px 24px; max-width: 920px; margin: 0 auto; }
+.banner { height: 240px; }
+}
+</style>
+</head>
+<body>
+<div class="comment-modal" id="commentModal">
+<div class="comment-box">
+<textarea id="commentInput" placeholder="输入你的评论..."></textarea>
+<div class="btn-group">
+<button class="submit" id="submitComment">提交评论</button>
+<button class="close-modal" id="closeModal">取消</button>
+</div>
+<div class="comment-list" id="commentList"></div>
+</div>
+</div>
+<div class="loading-wrap" id="loading">
+<div class="top-time-bar">
+<div class="time-text" id="beijingTime">北京时间 00:00:00</div>
+<div class="date-text" id="beijingDate">2026年07月20日</div>
+</div>
+<div class="sun-ring"></div>
+<div id="starBox"></div>
+<div class="avatar-box">
+<div class="avatar-inner">
+<img src="https://img2.nloln.de/file/BQACAgUAAyEGAASLVN5eAAJiompaoNKmk108_GM58bxwh99xVObSAALiIgACQiHYVlwLUvdBJWzEPQQ.jpg" onerror="this.style.display='none'" alt="头像">
+</div>
+</div>
+<div class="load-title">解卡</div>
+<div class="load-desc">做自己想做，想自己所想</div>
+<div class="load-slogan">All For One</div>
+<div class="load-progress" id="progressText">加载中 0%</div>
+<div class="down-arrow">⌄⌄⌄</div>
+</div>
+<div class="main-box" id="pageContent">
+<div class="banner" id="topBanner">
+<img class="banner-img" id="bannerImg" src="https://img2.nloln.de/file/BQACAgUAAyEGAASLVN5eAAJio2papc2wwkcLKkUBCsR1o0-B7uhcAALjIgACQiHYVlEmLvrXkxH4PQQ.png" alt="横幅">
+<div class="banner-overlay"></div>
+</div>
+<div class="tag-group">
+<div class="tag active" data-page="page-jieka">公告</div>
+<div class="tag" data-page="page-new">注入器</div>
+</div>
+<div class="page active" id="page-jieka">
+<div class="moment-card" data-card-id="card1">
+<span class="top-tag">公告</span>
+<div class="card-top">
+<div class="avatar">
+<img src="https://img2.nloln.de/file/BQACAgUAAyEGAASLVN5eAAJiompaoNKmk108_GM58bxwh99xVObSAALiIgACQiHYVlwLUvdBJWzEPQQ.jpg" onerror="this.style.display='none'" alt="头像">
+</div>
+<div class="card-info">
+<h3>解卡工具</h3>
+<p>2026年07月20日</p>
+</div>
+</div>
+<div class="card-desc">原作者：LiKa小恬<br>忍者解卡/自动绕过限制</div>
+<div class="card-data">
+<span class="like-btn">❤️ <span class="like-count">1</span> 点赞</span>
+<span class="comment-btn">💬  <span class="comment-count">0</span> 评论</span>
+</div>
+</div>
+<div class="moment-card" data-card-id="card2">
+<span class="top-tag">公告</span>
+<div class="card-top">
+<div class="avatar">
+<img src="https://img2.nloln.de/file/BQACAgUAAyEGAASLVN5eAAJiompaoNKmk108_GM58bxwh99xVObSAALiIgACQiHYVlwLUvdBJWzEPQQ.jpg" onerror="this.style.display='none'" alt="头像">
+</div>
+<div class="card-info">
+<h3>解卡工具</h3>
+<p>2026年07月20日</p>
+</div>
+</div>
+<div class="card-desc">实时更新 roblox忍者注入器/ roblox直装/最新版本原版安装包</div>
+<div class="card-data">
+<span class="like-btn">❤️ <span class="like-count">1</span> 点赞</span>
+<span class="comment-btn">💬  <span class="comment-count">0</span> 评论</span>
+</div>
+</div>
+</div>
+<div class="page" id="page-new">
+<div class="new-page-wrap">
+<div class="carousel-wrap" id="carouselWrap">
+<div class="slide-tip">
+<span>← 左右滑动切换插画 →</span>
+</div>
+<div class="carousel-stage" id="carouselStage">
+<div class="carousel-item item-left" id="item1">
+<a href="https://bypass.lat/BETA-BYPASS/" class="carousel-link" rel="noopener noreferrer"></a>
+<span class="carousel-text">忍者解卡</span>
+</div>
+<div class="carousel-item item-center" id="item2">
+<a href="https://1811880174.share.123pan.cn/123pan/bZPDVv-3DuLH" class="carousel-link" rel="noopener noreferrer"></a>
+<span class="carousel-text">忍者注入器</span>
+</div>
+<div class="carousel-item item-right" id="item3">
+<a href="https://1811880174.share.123pan.cn/123pan/bZPDVv-o5qlH" class="carousel-link" rel="noopener noreferrer"></a>
+<span class="carousel-text">Roblox直装</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+const bannerImg = document.getElementById("bannerImg");
+
+function showBanner() {
+if (bannerImg.complete && bannerImg.naturalHeight > 0) {
+bannerImg.classList.add("loaded");
+} else {
+bannerImg.onload = () => bannerImg.classList.add("loaded");
+bannerImg.onerror = () => {
+bannerImg.style.opacity = "0";
+};
+}
+}
+
+function checkSkipLoading() {
+return location.search.indexOf('skip_loading=1') > -1;
+}
+
+const loadingDom = document.getElementById("loading");
+const pageDom = document.getElementById("pageContent");
+const progressText = document.getElementById("progressText");
+
+if (checkSkipLoading()) {
+loadingDom.classList.add("hide");
+pageDom.classList.add("show");
+showBanner();
+} else {
+let progress = 0;
+const progressTimer = setInterval(()=>{
+progress += Math.floor(Math.random()*8)+1;
+if(progress >= 100){
+progress = 100;
+clearInterval(progressTimer);
+}
+progressText.innerText = `加载中 ${progress}%`;
+},150);
+
+setTimeout(()=>{
+loadingDom.classList.add("hide");
+pageDom.classList.add("show");
+showBanner();
+},2200);
+}
+
+function preloadAllImages() {
+const imgList = [
+"https://img2.nloln.de/file/BQACAgUAAyEGAASLVN5eAAJipmpay9IHwZldH0IbvfBP4zwrhYHsAAL3IgACQiHYViDrIU2wZZ00PQQ.jpeg",
+"https://img2.nloln.de/file/BQACAgUAAyEGAASLVN5eAAJip2pazA6uN2sDQvMHCSrpner5BqRRAAL4IgACQiHYViGm7cANaR-VPQQ.png",
+"https://img2.nloln.de/file/BQACAgUAAyEGAASLVN5eAAJi9mpdAAGoJPFQcAABDb3iQpTjYetKQEcAAkIfAAIW-ehWfNw7j0Tk2VQ9BA.jpg",
+"https://img2.nloln.de/file/BQACAgUAAyEGAASLVN5eAAJirGpa3biX0Xfr8Vo78Vq1hnhKIDCqAAIkIwACQiHYVjRmOy64we4VPQQ.jpeg"
+];
+imgList.forEach(src => {
+const img = new Image();
+img.decoding = "async";
+img.src = src;
+});
+}
+window.addEventListener("load", preloadAllImages);
+
+const modal = document.getElementById("commentModal");
+const commentInput = document.getElementById("commentInput");
+const commentList = document.getElementById("commentList");
+const submitBtn = document.getElementById("submitComment");
+const closeBtn = document.getElementById("closeModal");
+let currentCardId = "";
+
+function updateBeijingTime() {
+const now = new Date();
+const h = String(now.getHours()).padStart(2, "0");
+const m = String(now.getMinutes()).padStart(2, "0");
+const s = String(now.getSeconds()).padStart(2, "0");
+const y = now.getFullYear();
+const mo = String(now.getMonth() + 1).padStart(2, "0");
+const d = String(now.getDate()).padStart(2, "0");
+document.getElementById("beijingTime").innerText = `北京时间 ${h}:${m}:${s}`;
+document.getElementById("beijingDate").innerText = `${y}年${mo}月${d}`;
+}
+updateBeijingTime();
+setInterval(updateBeijingTime, 1000);
+
+const starBox = document.getElementById("starBox");
+function createStar(type) {
+const star = document.createElement("div");
+star.className = "star-particle " + type;
+const size = type === "star-slow" ? Math.random() * 2 + 1 : Math.random() * 1.2;
+star.style.width = size + "px";
+star.style.height = size + "px";
+star.style.left = Math.random() * 100 + "%";
+star.style.top = Math.random() * 30 + 70 + "%";
+star.style.animationDelay = Math.random() * (type === "star-slow" ? 15 : 8) + "s";
+starBox.appendChild(star);
+}
+for(let i=0;i<6;i++) createStar("star-slow");
+for(let i=0;i<10;i++) createStar("star-fast");
+
+const tags = document.querySelectorAll(".tag");
+const pages = document.querySelectorAll(".page");
+tags.forEach(tag=>{
+tag.onclick = ()=>{
+tags.forEach(t=>t.classList.remove("active"));
+tag.classList.add("active");
+const target = tag.dataset.page;
+pages.forEach(p=>{
+p.classList.remove("active");
+if(p.id === target) p.classList.add("active");
+});
+};
+});
+
+const wrap = document.getElementById('carouselWrap');
+const stage = document.getElementById('carouselStage');
+const item1 = document.getElementById('item1');
+const item2 = document.getElementById('item2');
+const item3 = document.getElementById('item3');
+const items = [item1, item2, item3];
+const total = items.length;
+let currentIndex = 1;
+let startX = 0;
+let moveX = 0;
+let isDragging = false;
+let dragTime = 0;
+const SWIPE_THRESHOLD = 45;
+
+function renderIndex(idx) {
+items.forEach(el => {
+el.classList.remove("item-center","item-left","item-right");
+el.style.pointerEvents = "none";
+});
+const prev = (idx - 1 + total) % total;
+const next = (idx + 1) % total;
+items[idx].classList.add("item-center");
+items[idx].style.pointerEvents = "auto";
+items[prev].classList.add("item-left");
+items[next].classList.add("item-right");
+}
+renderIndex(currentIndex);
+
+setInterval(()=>{
+stage.style.transition = "var(--transition-snap)";
+currentIndex = (currentIndex + 1) % total;
+renderIndex(currentIndex);
+},5000);
+
+wrap.addEventListener('touchstart', (e)=>{
+isDragging = true;
+startX = e.touches[0].clientX;
+dragTime = Date.now();
+moveX = 0;
+stage.style.transition = "none";
+});
+wrap.addEventListener('touchmove', (e)=>{
+if(!isDragging) return;
+moveX = e.touches[0].clientX - startX;
+stage.style.transform = `translateX(${moveX * 0.4}px)`;
+});
+wrap.addEventListener('touchend', ()=>{
+if(!isDragging) return;
+const dragDuration = Date.now() - dragTime;
+stage.style.transition = "var(--transition-snap)";
+stage.style.transform = "translateX(0)";
+if(Math.abs(moveX) < 30 && dragDuration < 120){
+isDragging = false; moveX = 0; startX = 0; dragTime=0;
+return;
+}
+if(moveX > SWIPE_THRESHOLD) {
+currentIndex = (currentIndex - 1 + total) % total;
+} else if(moveX < -SWIPE_THRESHOLD) {
+currentIndex = (currentIndex + 1) % total;
+}
+renderIndex(currentIndex);
+isDragging = false; moveX = 0; startX = 0; dragTime=0;
+});
+
+wrap.addEventListener('mousedown', e=>{
+isDragging = true;
+startX = e.clientX;
+dragTime = Date.now();
+moveX = 0;
+stage.style.transition = "none";
+wrap.style.cursor = "grabbing";
+});
+document.addEventListener('mousemove', e=>{
+if(!isDragging) return;
+moveX = e.clientX - startX;
+stage.style.transform = `translateX(${moveX * 0.4}px)`;
+});
+document.addEventListener('mouseup', ()=>{
+if(!isDragging) return;
+const dragDuration = Date.now() - dragTime;
+stage.style.transition = "var(--transition-snap)";
+stage.style.transform = "translateX(0)";
+wrap.style.cursor = "grab";
+if(Math.abs(moveX) < 30 && dragDuration < 120){
+isDragging = false; moveX = 0; startX = 0; dragTime=0;
+return;
+}
+if(moveX > SWIPE_THRESHOLD) {
+currentIndex = (currentIndex - 1 + total) % total;
+} else if(moveX < -SWIPE_THRESHOLD) {
+currentIndex = (currentIndex + 1) % total;
+}
+renderIndex(currentIndex);
+isDragging = false; moveX = 0; startX = 0; dragTime=0;
+});
+
+function getLikeData(){
+const data = localStorage.getItem("cardLikeData");
+return data ? JSON.parse(data) : {};
+}
+function saveLikeData(obj){
+localStorage.setItem("cardLikeData", JSON.stringify(obj));
+}
+function initLikeCount(){
+const likeData = getLikeData();
+document.querySelectorAll(".moment-card").forEach(card=>{
+const cid = card.dataset.cardId;
+const countDom = card.querySelector(".like-count");
+const liked = localStorage.getItem(`liked_${cid}`);
+if(likeData[cid]) countDom.innerText = likeData[cid];
+if(liked === "1") card.querySelector(".like-btn").style.color="#ff5873";
+});
+}
+document.querySelectorAll(".like-btn").forEach(btn=>{
+btn.onclick = function(){
+const card = this.closest(".moment-card");
+const cid = card.dataset.cardId;
+const key = `liked_${cid}`;
+const likeData = getLikeData();
+if(!likeData[cid]) likeData[cid] = 0;
+if(localStorage.getItem(key) === "1"){
+localStorage.removeItem(key);
+likeData[cid]--;
+this.style.color="#777";
+}else{
+localStorage.setItem(key,"1");
+likeData[cid]++;
+this.style.color="#ff5873";
+}
+saveLikeData(likeData);
+this.querySelector(".like-count").innerText = likeData[cid];
+};
+});
+
+function getCommentData(){
+const d = localStorage.getItem("cardCommentData");
+return d ? JSON.parse(d) : {};
+}
+function saveCommentData(obj){
+localStorage.setItem("cardCommentData", JSON.stringify(obj));
+}
+function renderComments(cid){
+const all = getCommentData();
+const list = all[cid] || [];
+commentList.innerHTML = "";
+list.forEach((txt,i)=>{
+const div = document.createElement("div");
+div.className = "comment-item";
+div.innerHTML = `<span>${txt}</span><span class="del-comment" data-i="${i}">删除</span>`;
+commentList.appendChild(div);
+});
+const card = document.querySelector(`[data-card-id="${cid}"]`);
+if(card) card.querySelector(".comment-count").innerText = list.length;
+document.querySelectorAll(".del-comment").forEach(del=>{
+del.onclick = function(){
+const idx = Number(this.dataset.i);
+const all = getCommentData();
+all[cid].splice(idx,1);
+saveCommentData(all);
+renderComments(cid);
+};
+});
+}
+document.querySelectorAll(".comment-btn").forEach(btn=>{
+btn.onclick = function(){
+currentCardId = this.closest(".moment-card").dataset.cardId;
+commentInput.value = "";
+renderComments(currentCardId);
+modal.style.display = "flex";
+};
+});
+closeBtn.onclick = ()=> modal.style.display = "none";
+submitBtn.onclick = function(){
+const txt = commentInput.value.trim();
+if(!txt) return alert("请输入评论");
+const all = getCommentData();
+if(!all[currentCardId]) all[currentCardId] = [];
+all[currentCardId].push(txt);
+saveCommentData(all);
+renderComments(currentCardId);
+commentInput.value = "";
+};
+initLikeCount();
+</script>
+</body>
+</html>
